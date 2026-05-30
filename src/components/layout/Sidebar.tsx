@@ -2,9 +2,6 @@ import {
   ShopOutlined,
   AppstoreOutlined,
   ControlOutlined,
-  BarChartOutlined,
-  BellOutlined,
-  FileTextOutlined,
   GiftOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
@@ -18,10 +15,6 @@ const menuItems = [
   { key: '/activate', icon: <AppstoreOutlined />, label: '服务开通' },
   { key: '/value-added', icon: <GiftOutlined />, label: '增值资源' },
   { key: '/manage', icon: <ControlOutlined />, label: '服务管理' },
-  { type: 'divider' as const },
-  { key: '/usage', icon: <BarChartOutlined />, label: '服务使用明细' },
-  { key: '/reminder', icon: <BellOutlined />, label: '到期提醒' },
-  { key: '/logs', icon: <FileTextOutlined />, label: '操作日志' },
 ];
 
 export default function Sidebar() {
