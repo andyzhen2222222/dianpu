@@ -2,8 +2,8 @@ import { MobileOutlined, WechatOutlined } from '@ant-design/icons';
 import { Popover, QRCode } from 'antd';
 
 const MINI_FEATURES = [
-  '随时随地查看订单',
-  '移动端快速回复客服',
+  '随时查看订单进度与详情',
+  '手机端快速回复买家客服消息',
   '店铺服务状态一目了然',
 ];
 
@@ -13,8 +13,8 @@ function MiniProgramQrPopover() {
       <div className="mini-program-qr-popover-header">
         <WechatOutlined className="mini-program-qr-wechat-icon" />
         <div>
-          <p className="mini-program-qr-popover-title">微信扫码 · 打开哪吒小程序</p>
-          <p className="mini-program-qr-popover-subtitle">手机端也能管理店铺与服务</p>
+          <p className="mini-program-qr-popover-title">微信扫码 · 查订单 · 回复客服</p>
+          <p className="mini-program-qr-popover-subtitle">哪吒小程序，手机上也能处理日常事务</p>
         </div>
       </div>
       <div className="mini-program-qr-frame">
@@ -47,12 +47,11 @@ export default function MiniProgramEntry() {
       mouseEnterDelay={0.05}
       mouseLeaveDelay={0.2}
     >
-      <button type="button" className="nav-mobile-entry" aria-label="手机端小程序">
-        <span className="nav-mobile-entry-inner">
+      <button type="button" className="nav-mobile-entry" aria-label="手机端小程序，查订单、回复客服">
+        <span className="nav-mobile-icon-wrap" aria-hidden="true">
           <MobileOutlined className="nav-mobile-icon" />
-          <span className="nav-mobile-text">手机端</span>
         </span>
-        <span className="nav-mobile-badge">扫码</span>
+        <span className="nav-mobile-subtitle">查订单 · 回复客服</span>
       </button>
     </Popover>
   );
