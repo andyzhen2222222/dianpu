@@ -13,7 +13,7 @@ function MiniProgramQrPopover() {
       <div className="mini-program-qr-popover-header">
         <WechatOutlined className="mini-program-qr-wechat-icon" />
         <div>
-          <p className="mini-program-qr-popover-title">微信扫码 · 查订单 · 回复客服</p>
+          <p className="mini-program-qr-popover-title">微信扫码 · 查订单，回客服</p>
           <p className="mini-program-qr-popover-subtitle">哪吒小程序，手机上也能处理日常事务</p>
         </div>
       </div>
@@ -47,11 +47,11 @@ export default function MiniProgramEntry() {
       mouseEnterDelay={0.05}
       mouseLeaveDelay={0.2}
     >
-      <button type="button" className="nav-mobile-entry" aria-label="手机端小程序，查订单、回复客服">
+      <button type="button" className="nav-mobile-entry" aria-label="手机端小程序，查订单、回客服">
         <span className="nav-mobile-icon-wrap" aria-hidden="true">
           <MobileOutlined className="nav-mobile-icon" />
         </span>
-        <span className="nav-mobile-subtitle">查订单 · 回复客服</span>
+        <span className="nav-mobile-subtitle">查订单，回客服</span>
       </button>
     </Popover>
   );

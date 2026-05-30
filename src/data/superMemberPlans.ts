@@ -7,27 +7,34 @@ export interface SuperMemberPlan {
   recommended?: boolean;
 }
 
+/** 单独购买参考价：调价+客服(店) + 跟卖+刊登(平台) */
+const separatePrice = {
+  month: 498 + 139 + 498 + 498, // 1633
+  quarter: 1098 + 1098 + 1038 + 1098, // 4332
+  year: 3888 + 3888 + 3858 + 3888, // 15522
+} as const;
+
 export const superMemberPlans: SuperMemberPlan[] = [
   {
     id: '1m',
     label: '月卡',
-    price: 1299,
-    originalPrice: 1633,
+    price: 1199,
+    originalPrice: separatePrice.month,
     packageName: '超级会员月卡',
   },
   {
     id: '1q',
     label: '季卡',
-    price: 3299,
-    originalPrice: 4599,
+    price: 2899,
+    originalPrice: separatePrice.quarter,
     packageName: '超级会员季卡',
     recommended: true,
   },
   {
     id: '1y',
     label: '年卡',
-    price: 9999,
-    originalPrice: 15999,
+    price: 8999,
+    originalPrice: separatePrice.year,
     packageName: '超级会员年卡',
   },
 ];

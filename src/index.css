@@ -119,7 +119,7 @@ body,
   box-shadow: 0 2px 8px rgba(82, 196, 26, 0.18);
 }
 
-.nav-mobile-entry:hover .nav-mobile-icon {
+.nav-mobile-entry:hover .nav-mobile-icon-wrap {
   animation-play-state: paused;
 }
 
@@ -133,13 +133,13 @@ body,
   border-radius: 50%;
   background: #52c41a;
   color: #fff;
+  transform-origin: center center;
+  animation: nav-mobile-shake 1.2s ease-in-out infinite;
 }
 
 .nav-mobile-icon {
   display: inline-block;
   font-size: 16px;
-  transform-origin: center center;
-  animation: nav-mobile-shake 1.6s ease-in-out infinite;
 }
 
 .nav-mobile-icon svg {
@@ -156,36 +156,36 @@ body,
 
 @keyframes nav-mobile-shake {
   0%,
-  35%,
+  25%,
   100% {
-    transform: rotate(0deg) translateX(0);
+    transform: rotate(0deg);
   }
-  38% {
-    transform: rotate(-14deg) translateX(-1px);
+  28% {
+    transform: rotate(-16deg);
   }
-  41% {
-    transform: rotate(14deg) translateX(1px);
+  31% {
+    transform: rotate(16deg);
   }
-  44% {
-    transform: rotate(-12deg) translateX(-1px);
+  34% {
+    transform: rotate(-14deg);
   }
-  47% {
-    transform: rotate(12deg) translateX(1px);
+  37% {
+    transform: rotate(14deg);
   }
-  50% {
-    transform: rotate(-8deg) translateX(-1px);
+  40% {
+    transform: rotate(-10deg);
   }
-  53% {
-    transform: rotate(8deg) translateX(1px);
+  43% {
+    transform: rotate(10deg);
   }
-  56% {
-    transform: rotate(-4deg) translateX(0);
+  46% {
+    transform: rotate(-5deg);
   }
-  59% {
-    transform: rotate(4deg) translateX(0);
+  49% {
+    transform: rotate(5deg);
   }
-  62% {
-    transform: rotate(0deg) translateX(0);
+  52% {
+    transform: rotate(0deg);
   }
 }
 
