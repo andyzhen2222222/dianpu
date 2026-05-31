@@ -6,6 +6,7 @@ import {
   platformCatalog,
   type PlatformCatalogItem,
 } from '../../data/platformCatalog';
+import PlatformLogo from '../PlatformLogo';
 
 interface PlatformSelectGridProps {
   search: string;
@@ -26,12 +27,12 @@ function PlatformCard({
       className="platform-select-card"
       onClick={() => onSelect(platform.id)}
     >
-      <div
+      <PlatformLogo
+        platformId={platform.id}
+        fallback={platform.logo}
+        logoColor={platform.logoColor}
         className="platform-select-logo"
-        style={{ background: platform.logoColor ?? '#f5f5f5', color: platform.logoColor ? '#fff' : '#595959' }}
-      >
-        {platform.logo}
-      </div>
+      />
       <div className="platform-select-name">{platform.name}</div>
       <div className="platform-select-features">
         <span className="platform-select-features-label">支持功能</span>

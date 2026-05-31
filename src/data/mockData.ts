@@ -39,6 +39,9 @@ export const initialPlatforms: Platform[] = [
         authStatus: 'normal',
         bindAt: '2026-05-09',
         lastSyncAt: '2026-05-28 11:21:40',
+        productCount: 1846,
+        productSyncStatus: 'success',
+        expireAt: '2026-06-25',
         services: {
           repricing: {
             name: 'AI调价',
@@ -64,6 +67,9 @@ export const initialPlatforms: Platform[] = [
         authStatus: 'normal',
         bindAt: '2026-04-12',
         lastSyncAt: '2026-05-27 09:15:22',
+        productCount: 0,
+        productSyncStatus: 'failed',
+        expireAt: '2026-07-01',
         services: {
           repricing: {
             name: 'AI调价',
@@ -87,6 +93,9 @@ export const initialPlatforms: Platform[] = [
         authStatus: 'normal',
         bindAt: '2026-03-20',
         lastSyncAt: '2026-05-26 16:42:08',
+        productCount: 932,
+        productSyncStatus: 'success',
+        expireAt: '2026-06-10',
         services: {
           repricing: {
             name: 'AI调价',
@@ -135,6 +144,9 @@ export const initialPlatforms: Platform[] = [
         authStatus: 'normal',
         bindAt: '2026-02-15',
         lastSyncAt: '2026-05-25 08:30:00',
+        productCount: 521,
+        productSyncStatus: 'success',
+        expireAt: '2026-07-15',
         services: {
           repricing: {
             name: 'AI调价',
@@ -158,6 +170,9 @@ export const initialPlatforms: Platform[] = [
         authStatus: 'abnormal',
         bindAt: '2026-01-08',
         lastSyncAt: '2026-05-20 14:22:11',
+        productCount: 0,
+        productSyncStatus: 'failed',
+        expireAt: '2026-06-05',
         services: {
           repricing: {
             name: 'AI调价',
@@ -206,6 +221,9 @@ export const initialPlatforms: Platform[] = [
         authStatus: 'normal',
         bindAt: '2026-04-01',
         lastSyncAt: '2026-05-28 10:00:00',
+        productCount: 128,
+        productSyncStatus: 'success',
+        expireAt: '2026-08-01',
         services: {
           repricing: {
             name: 'AI调价',
@@ -227,6 +245,9 @@ export const initialPlatforms: Platform[] = [
         authStatus: 'normal',
         bindAt: '2026-03-10',
         lastSyncAt: '2026-05-27 18:45:33',
+        productCount: 2674,
+        productSyncStatus: 'success',
+        expireAt: '2026-09-10',
         services: {
           repricing: {
             name: 'AI调价',

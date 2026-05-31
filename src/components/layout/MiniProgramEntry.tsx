@@ -1,36 +1,30 @@
-import { MobileOutlined, WechatOutlined } from '@ant-design/icons';
+import { MobileOutlined, RobotOutlined, WechatOutlined } from '@ant-design/icons';
 import { Popover, QRCode } from 'antd';
-
-const MINI_FEATURES = [
-  '随时查看订单进度与详情',
-  '手机端快速回复买家客服消息',
-  '店铺服务状态一目了然',
-];
 
 function MiniProgramQrPopover() {
   return (
-    <div className="mini-program-qr-popover">
-      <div className="mini-program-qr-popover-header">
-        <WechatOutlined className="mini-program-qr-wechat-icon" />
-        <div>
-          <p className="mini-program-qr-popover-title">微信扫码 · 查订单，回客服</p>
-          <p className="mini-program-qr-popover-subtitle">哪吒小程序，手机上也能处理日常事务</p>
-        </div>
+    <div className="mini-program-card">
+      <div className="mini-program-card-head">
+        <WechatOutlined className="mini-program-card-wechat" />
+        <span>哪吒小程序</span>
       </div>
-      <div className="mini-program-qr-frame">
+
+      <div className="mini-program-qr-wrap">
         <QRCode
           value="https://nezha.tech/mini-program"
-          size={120}
+          size={128}
           bordered={false}
-          color="#262626"
+          color="#07C160"
+          bgColor="#FFFFFF"
+          errorLevel="H"
         />
+        <div className="mini-program-qr-badge">
+          <RobotOutlined />
+        </div>
       </div>
-      <ul className="mini-program-qr-features">
-        {MINI_FEATURES.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-      <p className="mini-program-qr-popover-cta">打开微信 → 扫一扫 → 立即使用</p>
+
+      <p className="mini-program-card-desc">查订单，回客服</p>
+      <p className="mini-program-card-hint">微信扫一扫</p>
     </div>
   );
 }

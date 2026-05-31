@@ -24,6 +24,8 @@ export default function ServiceActivationPage() {
 
   const [activeMode, setActiveMode] = useState<PurchaseMode>(initialMode);
   const [targetId, setTargetId] = useState<string>();
+  const [storePlatformId, setStorePlatformId] = useState<string>();
+  const [storeId, setStoreId] = useState<string>();
 
   const { platforms, platformOptions, activatePlatformService, activateStoreService } =
     useStoreModule();
@@ -32,16 +34,19 @@ export default function ServiceActivationPage() {
   const activeFunc = isSuper ? 'repricing' : activeMode;
   const config = getFunctionPackage(activeFunc);
 
-  const storeOptions = useMemo(
-    () =>
-      platforms.flatMap((p) =>
-        p.stores.map((s) => ({
-          label: `${s.storeName}（${p.platformName}）`,
-          value: `${p.id}::${s.id}`,
-        })),
-      ),
-    [platforms],
-  );
+  const storeOptions = useMemo(() => {
+    if (!storePlatformId) return [];
+    const platform = platforms.find((p) => p.id === storePlatformId);
+    return (
+      platform?.stores.map((s) => ({
+        label: s.storeName,
+        value: s.id,
+      })) ?? []
+    );
+  }, [platforms, storePlatformId]);
+
+  const storeTargetId =
+    storePlatformId && storeId ? `${storePlatformId}::${storeId}` : undefined;
 
   const tabFunctions = [
     { key: 'super', label: '超级会员' },
@@ -51,26 +56,35 @@ export default function ServiceActivationPage() {
   const handleModeChange = (key: string) => {
     setActiveMode(key as PurchaseMode);
     setTargetId(undefined);
+    setStorePlatformId(undefined);
+    setStoreId(undefined);
     setSearchParams({ func: key });
   };
 
   const handlePurchase = (_planId: string, planTitle: string) => {
-    if (!targetId) {
-      message.warning(`请先选择${config.level === 'store' ? '店铺' : '平台'}`);
+    const resolvedTargetId =
+      config.level === 'store' ? storeTargetId : targetId;
+
+    if (!resolvedTargetId) {
+      message.warning(
+        config.level === 'store'
+          ? '请先选择平台和店铺'
+          : '请先选择平台',
+      );
       return;
     }
 
     if (config.level === 'platform') {
       activatePlatformService(
-        targetId,
+        resolvedTargetId,
         activeFunc as 'resale' | 'listing',
         planTitle,
       );
     } else {
-      const [platformId, storeId] = targetId.split('::');
+      const [platformId, selectedStoreId] = resolvedTargetId.split('::');
       activateStoreService(
         platformId,
-        storeId,
+        selectedStoreId,
         activeFunc as 'repricing' | 'customerService',
         planTitle,
       );
@@ -111,15 +125,34 @@ export default function ServiceActivationPage() {
           <div className="purchase-section">
             <div className="purchase-section-label">{config.targetLabel}</div>
             {config.level === 'store' ? (
-              <Select
-                placeholder="请选择店铺"
-                style={{ width: 320 }}
-                options={storeOptions}
-                value={targetId}
-                onChange={setTargetId}
-                showSearch
-                optionFilterProp="label"
-              />
+              <div className="purchase-target-row">
+                <div className="purchase-target-item">
+                  <span className="purchase-target-label">选择平台</span>
+                  <Select
+                    placeholder="请先选择平台"
+                    style={{ width: 240 }}
+                    options={platformOptions}
+                    value={storePlatformId}
+                    onChange={(v) => {
+                      setStorePlatformId(v);
+                      setStoreId(undefined);
+                    }}
+                  />
+                </div>
+                <div className="purchase-target-item">
+                  <span className="purchase-target-label">选择店铺</span>
+                  <Select
+                    placeholder="再选择店铺"
+                    style={{ width: 240 }}
+                    options={storeOptions}
+                    value={storeId}
+                    onChange={setStoreId}
+                    disabled={!storePlatformId}
+                    showSearch
+                    optionFilterProp="label"
+                  />
+                </div>
+              </div>
             ) : (
               <Select
                 placeholder="请选择平台"

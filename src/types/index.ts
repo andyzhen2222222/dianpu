@@ -1,3 +1,7 @@
+export type ProductSyncStatus = 'idle' | 'syncing' | 'success' | 'failed';
+
+export type StoreRuntimeStatus = 'normal' | 'expiring' | 'expired' | 'abnormal';
+
 export type AuthStatus = 'normal' | 'abnormal';
 
 export type ServiceStatus =
@@ -41,6 +45,9 @@ export interface Store {
   authStatus: AuthStatus;
   bindAt?: string;
   lastSyncAt?: string;
+  productCount?: number;
+  productSyncStatus?: ProductSyncStatus;
+  expireAt?: string;
   services: {
     repricing: StoreService;
     customerService: StoreService;

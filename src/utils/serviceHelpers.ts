@@ -5,6 +5,7 @@ import type {
   ServiceKey,
   ServiceStatus,
   Store,
+  StoreRuntimeStatus,
   StoreService,
 } from '../types';
 
@@ -55,6 +56,23 @@ export function getStorePrimaryExpireAt(store: Store): string {
 export function isExpiredDate(date?: string): boolean {
   if (!date) return false;
   return new Date(date) < new Date('2026-05-30');
+}
+
+export function isExpiringSoonDate(date?: string, withinDays = 7): boolean {
+  if (!date) return false;
+  const now = new Date('2026-05-30');
+  const target = new Date(date);
+  const diff = (target.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+  return diff >= 0 && diff <= withinDays;
+}
+
+export function getStoreRuntimeStatus(store: Store): StoreRuntimeStatus {
+  if (store.authStatus === 'abnormal') return 'abnormal';
+  const expireAt = store.expireAt ?? getStorePrimaryExpireAt(store);
+  if (expireAt === '-') return 'normal';
+  if (isExpiredDate(expireAt)) return 'expired';
+  if (isExpiringSoonDate(expireAt)) return 'expiring';
+  return 'normal';
 }
 
 export function filterPlatforms(

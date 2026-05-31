@@ -29,9 +29,10 @@ function updateStoreInPlatforms(
 interface StoreModuleContextValue {
   platforms: Platform[];
   platformOptions: { label: string; value: string }[];
-  bindStore: (values: Record<string, string>) => void;
+  bindStore: (values: Record<string, string>) => string;
   removeStore: (platformId: string, storeId: string) => void;
   updateStoreAuth: (platformId: string, storeId: string, status: Store['authStatus']) => void;
+  syncStoreProducts: (platformId: string, storeId: string) => Promise<void>;
   handlePlatformAction: (
     platformId: string,
     service: 'resale' | 'listing',
@@ -79,14 +80,17 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
 
   const bindStore = useCallback((values: Record<string, string>) => {
     const platformId = values.platform;
+    const storeId = `store-${Date.now()}`;
     setPlatforms((prev) => {
       const exists = prev.find((p) => p.id === platformId);
       const newStore: Store = {
-        id: `store-${Date.now()}`,
+        id: storeId,
         storeName: values.storeName,
         authStatus: 'normal',
         bindAt: new Date().toISOString().slice(0, 10),
         lastSyncAt: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        productCount: 0,
+        productSyncStatus: 'idle',
         services: {
           repricing: { name: 'AI调价', level: 'store', status: 'not_opened' },
           customerService: { name: '客服', level: 'store', status: 'not_opened' },
@@ -122,7 +126,7 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
       };
       return [...prev, newPlatform];
     });
-    message.success('店铺绑定成功');
+    return storeId;
   }, []);
 
   const removeStore = useCallback((platformId: string, storeId: string) => {
@@ -148,6 +152,45 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
           authStatus: status,
         })),
       );
+    },
+    [],
+  );
+
+  const syncStoreProducts = useCallback(
+    async (platformId: string, storeId: string) => {
+      let authAbnormal = false;
+      setPlatforms((prev) => {
+        const store = prev
+          .find((p) => p.id === platformId)
+          ?.stores.find((s) => s.id === storeId);
+        authAbnormal = store?.authStatus === 'abnormal';
+        return updateStoreInPlatforms(prev, platformId, storeId, (s) => ({
+          ...s,
+          productSyncStatus: 'syncing',
+        }));
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      setPlatforms((prev) =>
+        updateStoreInPlatforms(prev, platformId, storeId, (store) => {
+          const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+          return {
+            ...store,
+            productSyncStatus: authAbnormal ? 'failed' : 'success',
+            productCount: authAbnormal
+              ? store.productCount ?? 0
+              : (store.productCount ?? 0) + Math.floor(Math.random() * 80) + 20,
+            lastSyncAt: now,
+          };
+        }),
+      );
+
+      if (authAbnormal) {
+        message.error('商品同步失败，请检查店铺授权');
+      } else {
+        message.success('商品同步完成');
+      }
     },
     [],
   );
@@ -371,6 +414,7 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
       bindStore,
       removeStore,
       updateStoreAuth,
+      syncStoreProducts,
       handlePlatformAction,
       handleStoreAction,
       activatePlatformService,
@@ -384,6 +428,7 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
       bindStore,
       removeStore,
       updateStoreAuth,
+      syncStoreProducts,
       handlePlatformAction,
       handleStoreAction,
       activatePlatformService,

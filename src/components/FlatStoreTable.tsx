@@ -1,6 +1,7 @@
 import { Button, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import ServiceStatusChip from './ServiceStatusChip';
+import PlatformLogo from './PlatformLogo';
 import type { DrawerContext, Platform, ServiceKey, Store } from '../types';
 import {
   getInheritedDisplay,
@@ -30,7 +31,11 @@ function StoreInfoCell({ platform, store }: { platform: Platform; store: Store }
   return (
     <div className="flat-store-info">
       <div className="flat-store-info-main">
-        <span className="platform-logo platform-logo-sm">{platform.platformLogo}</span>
+        <PlatformLogo
+          platformId={platform.id}
+          fallback={platform.platformLogo}
+          className="platform-logo platform-logo-sm"
+        />
         <div className="flat-store-info-text">
           <span className="flat-store-name">{store.storeName}</span>
           <span className="flat-store-platform">{platform.platformName}</span>

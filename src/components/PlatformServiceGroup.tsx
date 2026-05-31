@@ -1,6 +1,7 @@
 import { DownOutlined, RightOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import ActionButtonGroup from './ActionButtonGroup';
+import PlatformLogo from './PlatformLogo';
 import StatusTag from './StatusTag';
 import StoreServiceTable from './StoreServiceTable';
 import type { DrawerContext, Platform, ServiceKey } from '../types';
@@ -82,7 +83,11 @@ export default function PlatformServiceGroup({
               onToggle(platform.id);
             }}
           />
-          <div className="platform-logo">{platform.platformLogo}</div>
+          <PlatformLogo
+            platformId={platform.id}
+            fallback={platform.platformLogo}
+            className="platform-logo"
+          />
           <div className="platform-info">
             <span className="platform-name">
               {platform.platformName}
