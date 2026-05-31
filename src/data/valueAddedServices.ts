@@ -62,5 +62,11 @@ export function calcStoragePrice(capacityId: string, durationId: string): number
 
 export const accountBalanceMock = {
   balance: 356562.91,
-  points: 0,
+  points: 1280.5,
 };
+
+export const paymentMethodOptions: { key: PaymentMethod; label: string }[] = [
+  { key: 'wechat', label: '微信支付' },
+  { key: 'balance', label: '账户余额' },
+  { key: 'points', label: '积分' },
+];

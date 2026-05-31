@@ -46,7 +46,7 @@ function buildServiceActions(
     case 'paused':
       return [{ key: 'enable', label: '开启', primary: true, onClick: onEnable }];
     case 'not_opened':
-      return [{ key: 'enable', label: '开启', primary: true, onClick: onEnable }];
+      return [{ key: 'activate', label: '开通', primary: true, onClick: onEnable }];
     default:
       return [];
   }
@@ -61,7 +61,7 @@ function serviceStateSubtitle(state: ManageState): string | undefined {
     case 'paused':
       return '服务已暂停，开启后恢复运行';
     case 'not_opened':
-      return '尚未开通，开启后将跳转开通页';
+      return '尚未开通，点击开通前往购买';
     default:
       return undefined;
   }

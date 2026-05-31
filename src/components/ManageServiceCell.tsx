@@ -32,8 +32,9 @@ function buildActions(
     case 'expired':
       return onRenew ? [{ key: 'renew', label: '续费', primary: true, onClick: onRenew }] : [];
     case 'paused':
-    case 'not_opened':
       return onEnable ? [{ key: 'enable', label: '开启', primary: true, onClick: onEnable }] : [];
+    case 'not_opened':
+      return onEnable ? [{ key: 'activate', label: '开通', primary: true, onClick: onEnable }] : [];
     default:
       return [];
   }

@@ -1276,6 +1276,25 @@ body,
   color: #ff4d4f;
 }
 
+.renew-modal-payment {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px dashed #f0f0f0;
+}
+
+.renew-modal-payment-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 8px;
+}
+
+.renew-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .placeholder-section {
   background: #fff;
   border: 1px solid #f0f0f0;

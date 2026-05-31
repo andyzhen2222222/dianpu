@@ -6,6 +6,7 @@ import PageHeader from '../components/PageHeader';
 import {
   accountBalanceMock,
   calcStoragePrice,
+  paymentMethodOptions,
   resourcePointPackages,
   storageCapacities,
   storageDurations,
@@ -16,12 +17,6 @@ import {
 const resourceTypes = [
   { key: 'points', label: '资源点' },
   { key: 'storage', label: '存储空间' },
-];
-
-const paymentMethods: { key: PaymentMethod; label: string }[] = [
-  { key: 'wechat', label: '微信支付' },
-  { key: 'balance', label: '账户余额' },
-  { key: 'points', label: '积分' },
 ];
 
 function OptionSelector<T extends { id: string; label: string }>({
@@ -152,7 +147,7 @@ export default function ValueAddedResourcesPage() {
           </span>
         </div>
         <div className="value-payment-methods">
-          {paymentMethods.map((method) => {
+          {paymentMethodOptions.map((method) => {
             const selected = paymentMethod === method.key;
             return (
               <button
