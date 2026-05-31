@@ -107,7 +107,7 @@ export default function StoresPage() {
   const [renewCtx, setRenewCtx] = useState<RenewContext | null>(null);
 
   const panelParam = searchParams.get('panel');
-  const activePanel: StorePanelKey = isStorePanelKey(panelParam) ? panelParam : 'auth';
+  const activePanel: StorePanelKey | null = isStorePanelKey(panelParam) ? panelParam : null;
 
   const data: StoreRow[] = useMemo(() => {
     const keyword = storeSearch.trim().toLowerCase();
@@ -135,11 +135,17 @@ export default function StoresPage() {
   }, [searchParams, data]);
 
   const setActivePanel = useCallback(
-    (panel: StorePanelKey, rowKey?: string) => {
+    (panel: StorePanelKey | null, rowKey?: string) => {
       setSearchParams((prev) => {
         const next = new URLSearchParams(prev);
-        next.set('panel', panel);
-        if (rowKey) next.set('expand', rowKey);
+        if (panel) {
+          next.set('panel', panel);
+        } else {
+          next.delete('panel');
+        }
+        if (rowKey) {
+          next.set('expand', rowKey);
+        }
         return next;
       });
     },
@@ -163,7 +169,6 @@ export default function StoresPage() {
   };
 
   const renderExpandedRow = (row: StoreRow) => {
-    const panelKey = activePanel;
     const collapseItems: CollapseProps['items'] = [
       {
         key: 'auth',
@@ -231,11 +236,13 @@ export default function StoresPage() {
           accordion
           bordered={false}
           className="store-hub-collapse"
-          activeKey={panelKey}
+          activeKey={activePanel ?? undefined}
           onChange={(key) => {
             const nextKey = Array.isArray(key) ? key[0] : key;
             if (nextKey === 'auth' || nextKey === 'sync' || nextKey === 'service') {
               setActivePanel(nextKey, row.key);
+            } else {
+              setActivePanel(null, row.key);
             }
           }}
           items={collapseItems}
@@ -277,7 +284,7 @@ export default function StoresPage() {
         ),
     },
     {
-      title: '同步',
+      title: '数据同步',
       width: 130,
       render: (_, { store }) => {
         const enabled = countEnabledSync(store);
@@ -293,7 +300,7 @@ export default function StoresPage() {
       },
     },
     {
-      title: '服务',
+      title: '服务状态',
       width: 280,
       render: (_, row) => <ServiceSummaryDots platform={row.platform} store={row.store} />,
     },
@@ -363,7 +370,17 @@ export default function StoresPage() {
               const nextKeys = keys as string[];
               setExpandedRowKeys(nextKeys);
               if (nextKeys.length === 1) {
-                setActivePanel(activePanel, nextKeys[0]);
+                setSearchParams((prev) => {
+                  const next = new URLSearchParams(prev);
+                  next.set('expand', nextKeys[0]);
+                  return next;
+                });
+              } else if (nextKeys.length === 0) {
+                setSearchParams((prev) => {
+                  const next = new URLSearchParams(prev);
+                  next.delete('expand');
+                  return next;
+                });
               }
             },
             rowExpandable: () => true,
