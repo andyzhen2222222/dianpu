@@ -150,28 +150,28 @@ export default function ServiceManagementPage() {
     },
     {
       title: '调价',
-      width: 128,
+      width: 96,
       align: 'center',
       render: (_, { platform, store }) =>
         renderStoreServiceCell(platform, store, 'repricing'),
     },
     {
       title: '客服',
-      width: 128,
+      width: 96,
       align: 'center',
       render: (_, { platform, store }) =>
         renderStoreServiceCell(platform, store, 'customerService'),
     },
     {
       title: '跟卖',
-      width: 128,
+      width: 96,
       align: 'center',
       render: (_, { platform, store }) =>
         renderInheritedServiceCell(platform, store, 'resale'),
     },
     {
       title: '刊登',
-      width: 128,
+      width: 96,
       align: 'center',
       render: (_, { platform, store }) =>
         renderInheritedServiceCell(platform, store, 'listing'),
@@ -210,7 +210,7 @@ export default function ServiceManagementPage() {
           columns={columns}
           dataSource={data}
           pagination={{ pageSize: 20, showTotal: (t) => `共 ${t} 条` }}
-          scroll={{ x: 760 }}
+          scroll={{ x: 640 }}
           size="middle"
         />
       </div>
