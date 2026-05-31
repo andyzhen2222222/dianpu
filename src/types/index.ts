@@ -1,4 +1,16 @@
-export type ProductSyncStatus = 'idle' | 'syncing' | 'success' | 'failed';
+export type SyncStatus = 'idle' | 'syncing' | 'success' | 'failed';
+
+/** @deprecated use SyncStatus */
+export type ProductSyncStatus = SyncStatus;
+
+export type SyncDataKey = 'products' | 'customerService' | 'metrics' | 'orders';
+
+export interface SyncDataItem {
+  enabled: boolean;
+  status: SyncStatus;
+  lastSyncAt?: string;
+  detail?: string;
+}
 
 export type StoreRuntimeStatus = 'normal' | 'expiring' | 'expired' | 'abnormal';
 
@@ -44,10 +56,8 @@ export interface Store {
   storeName: string;
   authStatus: AuthStatus;
   bindAt?: string;
-  lastSyncAt?: string;
-  productCount?: number;
-  productSyncStatus?: ProductSyncStatus;
   expireAt?: string;
+  syncSettings: Record<SyncDataKey, SyncDataItem>;
   services: {
     repricing: StoreService;
     customerService: StoreService;

@@ -4,9 +4,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AppLayout from './components/layout/AppLayout';
 import { StoreModuleProvider } from './context/StoreModuleContext';
 import AddStorePage from './pages/AddStorePage';
-import AuthStoresPage from './pages/AuthStoresPage';
+import StoresPage from './pages/StoresPage';
 import ServiceActivationPage from './pages/ServiceActivationPage';
-import ServiceManagementPage from './pages/ServiceManagementPage';
 import ValueAddedResourcesPage from './pages/ValueAddedResourcesPage';
 import './index.css';
 
@@ -27,13 +26,15 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route element={<AppLayout />}>
-              <Route index element={<Navigate to="/manage" replace />} />
-              <Route path="auth" element={<AuthStoresPage />} />
+              <Route index element={<Navigate to="/stores" replace />} />
+              <Route path="stores" element={<StoresPage />} />
+              <Route path="auth" element={<Navigate to="/stores?panel=auth" replace />} />
               <Route path="auth/add" element={<AddStorePage />} />
+              <Route path="sync" element={<Navigate to="/stores?panel=sync" replace />} />
               <Route path="activate" element={<ServiceActivationPage />} />
               <Route path="value-added" element={<ValueAddedResourcesPage />} />
-              <Route path="manage" element={<ServiceManagementPage />} />
-              <Route path="*" element={<Navigate to="/manage" replace />} />
+              <Route path="manage" element={<Navigate to="/stores?panel=service" replace />} />
+              <Route path="*" element={<Navigate to="/stores" replace />} />
             </Route>
           </Routes>
         </BrowserRouter>

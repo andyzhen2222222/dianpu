@@ -109,7 +109,7 @@ export default function AddStorePage() {
       <Breadcrumb
         className="add-store-breadcrumb"
         items={[
-          { title: <HomeOutlined />, href: '/manage' },
+          { title: <HomeOutlined />, href: '/stores' },
           { title: '店铺管理' },
           { title: '添加店铺' },
         ]}
@@ -230,10 +230,10 @@ export default function AddStorePage() {
             ))}
           </div>
           <div className="auth-result-footer">
-            <Button type="link" onClick={() => navigate('/auth')}>
-              返回授权店铺列表
+            <Button type="link" onClick={() => navigate('/stores')}>
+              返回店铺列表
             </Button>
-            <Button type="link" onClick={() => navigate('/manage')}>
+            <Button type="link" onClick={() => navigate('/stores?panel=service')}>
               前往服务管理
             </Button>
           </div>

@@ -29,14 +29,15 @@ export default function TopNav() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const onAuthPage = pathname.startsWith('/auth');
+  const onAuthPage =
+    pathname.startsWith('/auth') || pathname.startsWith('/stores');
   const onPurchasePage =
     pathname.startsWith('/activate') || pathname.startsWith('/value-added');
 
   return (
     <Header className="top-nav">
       <div className="top-nav-left">
-        <div className="logo" onClick={() => navigate('/manage')} role="button" tabIndex={0}>
+        <div className="logo" onClick={() => navigate('/stores')} role="button" tabIndex={0}>
           <RobotOutlined className="logo-icon" />
           <span className="logo-text">哪吒科技</span>
         </div>

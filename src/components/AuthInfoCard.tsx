@@ -5,14 +5,12 @@ import type { AuthStatus } from '../types';
 interface AuthInfoCardProps {
   authStatus: AuthStatus;
   bindAt?: string;
-  lastSyncAt?: string;
   onReauth?: () => void;
 }
 
 export default function AuthInfoCard({
   authStatus,
   bindAt,
-  lastSyncAt,
   onReauth,
 }: AuthInfoCardProps) {
   return (
@@ -29,10 +27,6 @@ export default function AuthInfoCard({
         <div className="auth-info-row">
           <span className="auth-info-label">绑定时间</span>
           <span>{bindAt ?? '-'}</span>
-        </div>
-        <div className="auth-info-row">
-          <span className="auth-info-label">最近同步</span>
-          <span>{lastSyncAt ?? '-'}</span>
         </div>
       </div>
       <Button size="small" onClick={onReauth}>

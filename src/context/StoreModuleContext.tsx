@@ -8,8 +8,33 @@ import {
   type ReactNode,
 } from 'react';
 import { initialPlatforms } from '../data/mockData';
+import { createDefaultSyncSettings, syncDataTypes } from '../data/syncConfig';
 import { findPlatformCatalog } from '../data/platformCatalog';
-import type { Platform, ServiceKey, Store } from '../types';
+import type { Platform, ServiceKey, Store, SyncDataKey } from '../types';
+
+function mockSyncDetail(key: SyncDataKey, store: Store): string | undefined {
+  const prev = store.syncSettings[key].detail;
+  if (key === 'products') {
+    const base = prev ? parseInt(prev, 10) || 0 : 0;
+    return `${base + Math.floor(Math.random() * 80) + 20} 件`;
+  }
+  if (key === 'customerService') {
+    const base = prev ? parseInt(prev, 10) || 0 : 0;
+    return `${base + Math.floor(Math.random() * 30) + 5} 会话`;
+  }
+  if (key === 'orders') {
+    const base = prev ? parseInt(prev, 10) || 0 : 0;
+    return `${base + Math.floor(Math.random() * 10) + 1} 单`;
+  }
+  return prev;
+}
+
+const serviceActionNames: Record<ServiceKey, string> = {
+  repricing: 'AI调价',
+  customerService: '客服',
+  resale: 'AI跟卖',
+  listing: 'AI刊登',
+};
 
 function updateStoreInPlatforms(
   platforms: Platform[],
@@ -32,7 +57,17 @@ interface StoreModuleContextValue {
   bindStore: (values: Record<string, string>) => string;
   removeStore: (platformId: string, storeId: string) => void;
   updateStoreAuth: (platformId: string, storeId: string, status: Store['authStatus']) => void;
-  syncStoreProducts: (platformId: string, storeId: string) => Promise<void>;
+  updateSyncEnabled: (
+    platformId: string,
+    storeId: string,
+    key: SyncDataKey,
+    enabled: boolean,
+  ) => void;
+  runStoreSync: (
+    platformId: string,
+    storeId: string,
+    keys?: SyncDataKey[],
+  ) => Promise<void>;
   handlePlatformAction: (
     platformId: string,
     service: 'resale' | 'listing',
@@ -88,9 +123,7 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
         storeName: values.storeName,
         authStatus: 'normal',
         bindAt: new Date().toISOString().slice(0, 10),
-        lastSyncAt: new Date().toISOString().replace('T', ' ').slice(0, 19),
-        productCount: 0,
-        productSyncStatus: 'idle',
+        syncSettings: createDefaultSyncSettings(),
         services: {
           repricing: { name: 'AI调价', level: 'store', status: 'not_opened' },
           customerService: { name: '客服', level: 'store', status: 'not_opened' },
@@ -152,44 +185,108 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
           authStatus: status,
         })),
       );
+      message.success(status === 'normal' ? '授权已更新' : '授权状态已变更');
     },
     [],
   );
 
-  const syncStoreProducts = useCallback(
-    async (platformId: string, storeId: string) => {
+  const updateSyncEnabled = useCallback(
+    (platformId: string, storeId: string, key: SyncDataKey, enabled: boolean) => {
+      setPlatforms((prev) =>
+        updateStoreInPlatforms(prev, platformId, storeId, (store) => {
+          const current = store.syncSettings[key];
+          return {
+            ...store,
+            syncSettings: {
+              ...store.syncSettings,
+              [key]: {
+                ...current,
+                enabled,
+                status:
+                  !enabled && current.status === 'syncing'
+                    ? 'idle'
+                    : current.status,
+              },
+            },
+          };
+        }),
+      );
+      const label = syncDataTypes.find((t) => t.key === key)?.label ?? key;
+      message.success(enabled ? `已开启${label}同步` : `已关闭${label}同步`);
+    },
+    [],
+  );
+
+  const runStoreSync = useCallback(
+    async (platformId: string, storeId: string, keys?: SyncDataKey[]) => {
       let authAbnormal = false;
+      let targetKeys: SyncDataKey[] = [];
+
       setPlatforms((prev) => {
         const store = prev
           .find((p) => p.id === platformId)
           ?.stores.find((s) => s.id === storeId);
-        authAbnormal = store?.authStatus === 'abnormal';
+        if (!store) return prev;
+
+        authAbnormal = store.authStatus === 'abnormal';
+        targetKeys =
+          keys ??
+          (Object.entries(store.syncSettings)
+            .filter(([, item]) => item.enabled)
+            .map(([key]) => key as SyncDataKey));
+
+        if (targetKeys.length === 0) {
+          return prev;
+        }
+
         return updateStoreInPlatforms(prev, platformId, storeId, (s) => ({
           ...s,
-          productSyncStatus: 'syncing',
+          syncSettings: {
+            ...s.syncSettings,
+            ...Object.fromEntries(
+              targetKeys.map((key) => [
+                key,
+                { ...s.syncSettings[key], status: 'syncing' as const },
+              ]),
+            ),
+          },
         }));
       });
+
+      if (targetKeys.length === 0) {
+        message.warning('请至少开启一项数据同步');
+        return;
+      }
 
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       setPlatforms((prev) =>
         updateStoreInPlatforms(prev, platformId, storeId, (store) => {
           const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
-          return {
-            ...store,
-            productSyncStatus: authAbnormal ? 'failed' : 'success',
-            productCount: authAbnormal
-              ? store.productCount ?? 0
-              : (store.productCount ?? 0) + Math.floor(Math.random() * 80) + 20,
-            lastSyncAt: now,
-          };
+          const nextSettings = { ...store.syncSettings };
+
+          targetKeys.forEach((key) => {
+            const failed = authAbnormal;
+            nextSettings[key] = {
+              ...nextSettings[key],
+              status: failed ? 'failed' : 'success',
+              lastSyncAt: now,
+              detail: failed ? nextSettings[key].detail : mockSyncDetail(key, store),
+            };
+          });
+
+          return { ...store, syncSettings: nextSettings };
         }),
       );
 
       if (authAbnormal) {
-        message.error('商品同步失败，请检查店铺授权');
+        message.error('数据同步失败，请检查店铺授权');
+      } else if (targetKeys.length === 1) {
+        const label =
+          syncDataTypes.find((t) => t.key === targetKeys[0])?.label ?? '数据';
+        message.success(`${label}同步完成`);
       } else {
-        message.success('商品同步完成');
+        message.success('已同步全部开启的数据');
       }
     },
     [],
@@ -227,14 +324,20 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
       service: ServiceKey,
       action: string,
     ) => {
+      const serviceName = serviceActionNames[service];
+
       setPlatforms((prev) =>
         updateStoreInPlatforms(prev, platformId, storeId, (store) => {
           const next = { ...store, services: { ...store.services } };
 
           if (service === 'repricing' || service === 'customerService') {
             const svc = { ...next.services[service] };
-            if (action === 'pause') svc.status = 'paused';
-            if (action === 'resume') svc.status = 'active';
+            if (action === 'pause' && svc.status === 'active') {
+              svc.status = 'paused';
+            }
+            if (action === 'resume' && svc.status === 'paused') {
+              svc.status = 'active';
+            }
             next.services[service] = svc;
           }
 
@@ -248,6 +351,13 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
           return next;
         }),
       );
+
+      if (action === 'pause') {
+        message.success(`${serviceName} 已暂停`);
+      }
+      if (action === 'resume') {
+        message.success(`${serviceName} 已开启`);
+      }
     },
     [],
   );
@@ -414,7 +524,8 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
       bindStore,
       removeStore,
       updateStoreAuth,
-      syncStoreProducts,
+      updateSyncEnabled,
+      runStoreSync,
       handlePlatformAction,
       handleStoreAction,
       activatePlatformService,
@@ -428,7 +539,8 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
       bindStore,
       removeStore,
       updateStoreAuth,
-      syncStoreProducts,
+      updateSyncEnabled,
+      runStoreSync,
       handlePlatformAction,
       handleStoreAction,
       activatePlatformService,

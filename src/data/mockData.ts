@@ -1,4 +1,5 @@
 import type { Platform, SummaryStats } from '../types';
+import { createDefaultSyncSettings } from './syncConfig';
 
 export const summaryStats: SummaryStats = {
   boundStores: 129,
@@ -38,10 +39,28 @@ export const initialPlatforms: Platform[] = [
         storeName: 'Saturn 土星',
         authStatus: 'normal',
         bindAt: '2026-05-09',
-        lastSyncAt: '2026-05-28 11:21:40',
-        productCount: 1846,
-        productSyncStatus: 'success',
         expireAt: '2026-06-25',
+        syncSettings: createDefaultSyncSettings({
+          products: {
+            enabled: true,
+            status: 'success',
+            lastSyncAt: '2026-05-28 11:21:40',
+            detail: '1846 件',
+          },
+          customerService: {
+            enabled: true,
+            status: 'success',
+            lastSyncAt: '2026-05-28 10:55:00',
+            detail: '128 会话',
+          },
+          metrics: { enabled: true, status: 'success', lastSyncAt: '2026-05-28 10:30:00' },
+          orders: {
+            enabled: true,
+            status: 'success',
+            lastSyncAt: '2026-05-28 11:00:00',
+            detail: '56 单',
+          },
+        }),
         services: {
           repricing: {
             name: 'AI调价',
@@ -66,10 +85,17 @@ export const initialPlatforms: Platform[] = [
         storeName: 'Guava 番石榴',
         authStatus: 'normal',
         bindAt: '2026-04-12',
-        lastSyncAt: '2026-05-27 09:15:22',
-        productCount: 0,
-        productSyncStatus: 'failed',
         expireAt: '2026-07-01',
+        syncSettings: createDefaultSyncSettings({
+          products: {
+            enabled: true,
+            status: 'failed',
+            lastSyncAt: '2026-05-27 09:15:22',
+          },
+          customerService: { enabled: false, status: 'idle' },
+          metrics: { enabled: true, status: 'success', lastSyncAt: '2026-05-27 08:00:00' },
+          orders: { enabled: true, status: 'success', lastSyncAt: '2026-05-27 09:00:00', detail: '12 单' },
+        }),
         services: {
           repricing: {
             name: 'AI调价',
@@ -92,10 +118,23 @@ export const initialPlatforms: Platform[] = [
         storeName: 'SELEAD Tech',
         authStatus: 'normal',
         bindAt: '2026-03-20',
-        lastSyncAt: '2026-05-26 16:42:08',
-        productCount: 932,
-        productSyncStatus: 'success',
         expireAt: '2026-06-10',
+        syncSettings: createDefaultSyncSettings({
+          products: {
+            enabled: true,
+            status: 'success',
+            lastSyncAt: '2026-05-26 16:42:08',
+            detail: '932 件',
+          },
+          customerService: {
+            enabled: true,
+            status: 'success',
+            lastSyncAt: '2026-05-26 16:30:00',
+            detail: '45 会话',
+          },
+          metrics: { enabled: true, status: 'success', lastSyncAt: '2026-05-26 15:00:00' },
+          orders: { enabled: true, status: 'success', lastSyncAt: '2026-05-26 16:00:00', detail: '23 单' },
+        }),
         services: {
           repricing: {
             name: 'AI调价',
@@ -143,10 +182,18 @@ export const initialPlatforms: Platform[] = [
         storeName: 'Ozon 旗舰店',
         authStatus: 'normal',
         bindAt: '2026-02-15',
-        lastSyncAt: '2026-05-25 08:30:00',
-        productCount: 521,
-        productSyncStatus: 'success',
         expireAt: '2026-07-15',
+        syncSettings: createDefaultSyncSettings({
+          products: {
+            enabled: true,
+            status: 'success',
+            lastSyncAt: '2026-05-25 08:30:00',
+            detail: '521 件',
+          },
+          customerService: { enabled: false, status: 'idle' },
+          metrics: { enabled: true, status: 'success', lastSyncAt: '2026-05-25 08:00:00' },
+          orders: { enabled: true, status: 'success', lastSyncAt: '2026-05-25 08:15:00', detail: '8 单' },
+        }),
         services: {
           repricing: {
             name: 'AI调价',
@@ -169,10 +216,22 @@ export const initialPlatforms: Platform[] = [
         storeName: 'Ozon 欧洲站',
         authStatus: 'abnormal',
         bindAt: '2026-01-08',
-        lastSyncAt: '2026-05-20 14:22:11',
-        productCount: 0,
-        productSyncStatus: 'failed',
         expireAt: '2026-06-05',
+        syncSettings: createDefaultSyncSettings({
+          products: {
+            enabled: true,
+            status: 'failed',
+            lastSyncAt: '2026-05-20 14:22:11',
+          },
+          customerService: {
+            enabled: true,
+            status: 'success',
+            lastSyncAt: '2026-05-20 14:00:00',
+            detail: '67 会话',
+          },
+          metrics: { enabled: false, status: 'idle' },
+          orders: { enabled: true, status: 'success', lastSyncAt: '2026-05-20 13:30:00', detail: '5 单' },
+        }),
         services: {
           repricing: {
             name: 'AI调价',
@@ -220,10 +279,16 @@ export const initialPlatforms: Platform[] = [
         storeName: 'fnac 法国站',
         authStatus: 'normal',
         bindAt: '2026-04-01',
-        lastSyncAt: '2026-05-28 10:00:00',
-        productCount: 128,
-        productSyncStatus: 'success',
         expireAt: '2026-08-01',
+        syncSettings: createDefaultSyncSettings({
+          products: {
+            enabled: false,
+            status: 'idle',
+          },
+          customerService: { enabled: false, status: 'idle' },
+          metrics: { enabled: true, status: 'success', lastSyncAt: '2026-05-28 10:00:00' },
+          orders: { enabled: true, status: 'success', lastSyncAt: '2026-05-28 09:30:00', detail: '3 单' },
+        }),
         services: {
           repricing: {
             name: 'AI调价',
@@ -244,10 +309,23 @@ export const initialPlatforms: Platform[] = [
         storeName: 'fnac 数码专营',
         authStatus: 'normal',
         bindAt: '2026-03-10',
-        lastSyncAt: '2026-05-27 18:45:33',
-        productCount: 2674,
-        productSyncStatus: 'success',
         expireAt: '2026-09-10',
+        syncSettings: createDefaultSyncSettings({
+          products: {
+            enabled: true,
+            status: 'success',
+            lastSyncAt: '2026-05-27 18:45:33',
+            detail: '2674 件',
+          },
+          customerService: {
+            enabled: true,
+            status: 'success',
+            lastSyncAt: '2026-05-27 18:30:00',
+            detail: '210 会话',
+          },
+          metrics: { enabled: true, status: 'success', lastSyncAt: '2026-05-27 18:00:00' },
+          orders: { enabled: true, status: 'success', lastSyncAt: '2026-05-27 18:40:00', detail: '89 单' },
+        }),
         services: {
           repricing: {
             name: 'AI调价',

@@ -286,7 +286,6 @@ export default function ServiceDrawerContent({
         <AuthInfoCard
           authStatus={targetStore.authStatus}
           bindAt={targetStore.bindAt}
-          lastSyncAt={targetStore.lastSyncAt}
           onReauth={() => {}}
         />
       )}
