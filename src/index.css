@@ -887,6 +887,66 @@ body,
   font-weight: 500;
 }
 
+.auth-store-status-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.auth-store-status-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-store-status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: default;
+}
+
+.auth-store-status-icon.store-normal {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.auth-store-status-icon.store-expiring {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.auth-store-status-icon.store-expired,
+.auth-store-status-icon.store-abnormal {
+  background: #fff2f0;
+  color: #ff4d4f;
+}
+
+.auth-store-status-icon.sync-idle {
+  background: #fafafa;
+  color: #bfbfbf;
+}
+
+.auth-store-status-icon.sync-syncing {
+  background: #e6f4ff;
+  color: #1677ff;
+}
+
+.auth-store-status-icon.sync-success {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.auth-store-status-icon.sync-failed {
+  background: #fff2f0;
+  color: #ff4d4f;
+}
+
 .auth-store-renew-btn {
   font-size: 12px;
   height: 24px;

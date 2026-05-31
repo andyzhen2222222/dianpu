@@ -1,7 +1,18 @@
-import { PlusOutlined, ReloadOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
-import { Button, Input, Popconfirm, Select, Space, Table, Tag } from 'antd';
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+  ExclamationCircleOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+  ReloadOutlined,
+  SearchOutlined,
+  ShopOutlined,
+  SyncOutlined,
+} from '@ant-design/icons';
+import { Button, Input, Popconfirm, Select, Space, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import PlatformLogo from '../components/PlatformLogo';
@@ -21,19 +32,19 @@ interface AuthStoreRow {
 
 const syncStatusMap: Record<
   ProductSyncStatus,
-  { label: string; color: string }
+  { label: string; icon: ReactNode; className: string }
 > = {
-  idle: { label: '未同步', color: 'default' },
-  syncing: { label: '同步中', color: 'processing' },
-  success: { label: '同步完成', color: 'success' },
-  failed: { label: '同步失败', color: 'error' },
+  idle: { label: '未同步', icon: <MinusCircleOutlined />, className: 'idle' },
+  syncing: { label: '同步中', icon: <SyncOutlined spin />, className: 'syncing' },
+  success: { label: '同步完成', icon: <CheckCircleOutlined />, className: 'success' },
+  failed: { label: '同步失败', icon: <CloseCircleOutlined />, className: 'failed' },
 };
 
 const storeStatusMap = {
-  normal: { label: '正常', color: 'success' },
-  expiring: { label: '临期', color: 'warning' },
-  expired: { label: '到期', color: 'error' },
-  abnormal: { label: '异常', color: 'error' },
+  normal: { label: '正常', icon: <CheckCircleOutlined />, className: 'normal' },
+  expiring: { label: '临期', icon: <ClockCircleOutlined />, className: 'expiring' },
+  expired: { label: '到期', icon: <CloseCircleOutlined />, className: 'expired' },
+  abnormal: { label: '异常', icon: <ExclamationCircleOutlined />, className: 'abnormal' },
 } as const;
 
 export default function AuthStoresPage() {
@@ -101,12 +112,47 @@ export default function AuthStoresPage() {
       ),
     },
     {
-      title: '商品同步状态',
+      title: '状态',
       width: 120,
+      align: 'center',
       render: (_, { store }) => {
-        const status = store.productSyncStatus ?? 'idle';
-        const meta = syncStatusMap[status];
-        return <Tag color={meta.color}>{meta.label}</Tag>;
+        const syncStatus = store.productSyncStatus ?? 'idle';
+        const syncMeta = syncStatusMap[syncStatus];
+        const runtime = getStoreRuntimeStatus(store);
+        const storeMeta = storeStatusMap[runtime];
+        const needRenew = runtime === 'expired' || runtime === 'expiring';
+        return (
+          <div className="auth-store-status-cell">
+            <div className="auth-store-status-icons">
+              <Tooltip title={`店铺：${storeMeta.label}`}>
+                <span
+                  className={`auth-store-status-icon store-${storeMeta.className}`}
+                  aria-label={`店铺${storeMeta.label}`}
+                >
+                  <ShopOutlined />
+                </span>
+              </Tooltip>
+              <Tooltip title={`同步：${syncMeta.label}`}>
+                <span
+                  className={`auth-store-status-icon sync-${syncMeta.className}`}
+                  aria-label={`同步${syncMeta.label}`}
+                >
+                  {syncMeta.icon}
+                </span>
+              </Tooltip>
+            </div>
+            {needRenew && (
+              <Button
+                type="primary"
+                size="small"
+                className="auth-store-renew-btn"
+                onClick={() => navigate('/activate?func=repricing')}
+              >
+                续费
+              </Button>
+            )}
+          </div>
+        );
       },
     },
     {
@@ -137,30 +183,6 @@ export default function AuthStoresPage() {
           >
             {expireAt}
           </span>
-        );
-      },
-    },
-    {
-      title: '店铺状态',
-      width: 140,
-      render: (_, { store }) => {
-        const runtime = getStoreRuntimeStatus(store);
-        const meta = storeStatusMap[runtime];
-        const needRenew = runtime === 'expired' || runtime === 'expiring';
-        return (
-          <Space size={8}>
-            <Tag color={meta.color}>{meta.label}</Tag>
-            {needRenew && (
-              <Button
-                type="primary"
-                size="small"
-                className="auth-store-renew-btn"
-                onClick={() => navigate('/activate?func=repricing')}
-              >
-                续费
-              </Button>
-            )}
-          </Space>
         );
       },
     },
@@ -244,7 +266,7 @@ export default function AuthStoresPage() {
         <Table
           columns={columns}
           dataSource={data}
-          scroll={{ x: 1300 }}
+          scroll={{ x: 1180 }}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
