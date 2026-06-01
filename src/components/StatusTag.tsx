@@ -12,7 +12,6 @@ const statusStyles: Record<
   { color: string; bg: string; border: string }
 > = {
   active: { color: '#389e0d', bg: '#f6ffed', border: '#b7eb8f' },
-  paused: { color: '#8c8c8c', bg: '#fafafa', border: '#d9d9d9' },
   not_opened: { color: '#8c8c8c', bg: '#fafafa', border: '#d9d9d9' },
   expired: { color: '#cf1322', bg: '#fff2f0', border: '#ffa39e' },
   expiring_soon: { color: '#d46b08', bg: '#fff7e6', border: '#ffd591' },

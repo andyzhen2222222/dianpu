@@ -1,12 +1,11 @@
 import type { ServiceStatus } from '../types';
 
-export type ManageState = 'normal' | 'expiring' | 'expired' | 'paused' | 'not_opened';
+export type ManageState = 'normal' | 'expiring' | 'expired' | 'not_opened';
 
 export const manageStateLabels: Record<ManageState, string> = {
   normal: '正常',
   expiring: '临期',
   expired: '到期',
-  paused: '暂停',
   not_opened: '未开通',
 };
 
@@ -32,7 +31,6 @@ export function resolveManageState(
 ): ManageState {
   if (status === 'not_opened') return 'not_opened';
   if (status === 'expired' || isExpiredDate(expireAt)) return 'expired';
-  if (status === 'paused') return 'paused';
   if (status === 'expiring_soon' || isExpiringSoonDate(expireAt)) return 'expiring';
   if (status === 'active') return 'normal';
   return 'not_opened';
@@ -40,12 +38,11 @@ export function resolveManageState(
 
 export function resolveInheritedManageState(
   platformStatus: ServiceStatus,
-  storeUsageStatus: 'active' | 'paused',
+  _storeUsageStatus: 'active',
   expireAt?: string,
 ): ManageState {
   if (platformStatus === 'not_opened') return 'not_opened';
   if (platformStatus === 'expired' || isExpiredDate(expireAt)) return 'expired';
-  if (platformStatus === 'paused' || storeUsageStatus === 'paused') return 'paused';
   if (platformStatus === 'expiring_soon' || isExpiringSoonDate(expireAt)) {
     return 'expiring';
   }

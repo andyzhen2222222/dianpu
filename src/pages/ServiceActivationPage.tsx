@@ -49,7 +49,7 @@ export default function ServiceActivationPage() {
     storePlatformId && storeId ? `${storePlatformId}::${storeId}` : undefined;
 
   const tabFunctions = [
-    { key: 'super', label: '超级会员' },
+    { key: 'super', label: '组合套餐' },
     ...functionPackages.map((f) => ({ key: f.key, label: f.label })),
   ];
 
@@ -96,7 +96,7 @@ export default function ServiceActivationPage() {
     <div className="page-container">
       <PageHeader
         title="服务开通"
-        subtitle="超级会员一键全开，或按功能单独购买套餐"
+        subtitle="组合套餐一键全开，或按功能单独购买套餐"
       />
 
       <div className="purchase-section">

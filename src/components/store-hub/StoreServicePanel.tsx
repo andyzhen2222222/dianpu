@@ -24,27 +24,20 @@ interface StoreServicePanelProps {
   platform: Platform;
   store: Store;
   onEnable: (serviceKey: ServiceKey) => void;
-  onPause: (serviceKey: ServiceKey) => void;
   onRenew: (serviceKey: ServiceKey) => void;
 }
 
 function buildServiceActions(
   manageState: ManageState,
   onEnable: () => void,
-  onPause: () => void,
   onRenew: () => void,
 ): HubAction[] {
   switch (manageState) {
     case 'normal':
     case 'expiring':
-      return [
-        { key: 'renew', label: '续费', primary: true, onClick: onRenew },
-        { key: 'pause', label: '暂停', onClick: onPause },
-      ];
+      return [{ key: 'renew', label: '续费', primary: true, onClick: onRenew }];
     case 'expired':
       return [{ key: 'renew', label: '续费', primary: true, onClick: onRenew }];
-    case 'paused':
-      return [{ key: 'enable', label: '开启', primary: true, onClick: onEnable }];
     case 'not_opened':
       return [{ key: 'activate', label: '开通', primary: true, onClick: onEnable }];
     default:
@@ -58,8 +51,6 @@ function serviceStateSubtitle(state: ManageState): string | undefined {
       return '即将到期，请及时续费';
     case 'expired':
       return '服务已到期，续费后恢复使用';
-    case 'paused':
-      return '服务已暂停，开启后恢复运行';
     case 'not_opened':
       return '尚未开通，点击开通前往购买';
     default:
@@ -71,7 +62,6 @@ export default function StoreServicePanel({
   platform,
   store,
   onEnable,
-  onPause,
   onRenew,
 }: StoreServicePanelProps) {
   const storeServices = (['repricing', 'customerService'] as const).map((key) => {
@@ -119,7 +109,6 @@ export default function StoreServicePanel({
               actions={buildServiceActions(
                 svc.manageState,
                 () => onEnable(svc.key),
-                () => onPause(svc.key),
                 () => onRenew(svc.key),
               )}
             />

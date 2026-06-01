@@ -25,7 +25,16 @@ export default function SuperMemberSection() {
   }, [platforms, platformId]);
 
   const plan = superMemberPlans.find((p) => p.id === selectedPlan)!;
-  const discount = Math.round((1 - plan.price / plan.originalPrice) * 100);
+  const maxDiscount = useMemo(
+    () =>
+      Math.max(
+        ...superMemberPlans.map((p) =>
+          Math.round((1 - p.price / p.originalPrice) * 100),
+        ),
+      ),
+    [],
+  );
+  const planDiscount = Math.round((1 - plan.price / plan.originalPrice) * 100);
 
   const handlePurchase = () => {
     if (!platformId) {
@@ -43,18 +52,23 @@ export default function SuperMemberSection() {
   return (
     <div className="super-member-section">
       <div className="super-member-badge">
-        <CrownOutlined /> 超级会员
+        <CrownOutlined /> 组合套餐
       </div>
 
       <div className="super-member-header">
         <div>
-          <h2 className="super-member-title">一键开通全部功能</h2>
+          <h2 className="super-member-title">
+            一键开通
+            <span className="super-member-title-services">调价、客服、跟卖、刊登</span>
+            ，比单独购买最高省
+            <span className="super-member-title-discount">{maxDiscount}%</span>
+          </h2>
           <p className="super-member-desc">
-            同时开通调价、客服、跟卖、刊登，比单独购买最高省 {discount}%
+            当前{plan.label}可省 ¥{plan.originalPrice - plan.price}（省 {planDiscount}%）
           </p>
           <div className="super-member-billing-hint">
             <strong>计费说明：</strong>
-            每购买 1 份超级会员 = 选定<strong> 1 个平台</strong>的跟卖/刊登
+            每购买 1 份组合套餐 = 选定<strong> 1 个平台</strong>的跟卖/刊登
             + 选定<strong> 1 个店铺</strong>的调价/客服。
             同一平台下其他店铺如需调价/客服，需再次购买；跟卖/刊登开通后该平台下全部店铺自动继承。
           </div>

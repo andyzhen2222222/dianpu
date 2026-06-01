@@ -11,7 +11,6 @@ interface ServiceStatusChipProps {
 
 const chipStyles: Record<ServiceStatus, { bg: string; color: string; border: string }> = {
   active: { bg: '#f6ffed', color: '#389e0d', border: '#b7eb8f' },
-  paused: { bg: '#fafafa', color: '#8c8c8c', border: '#d9d9d9' },
   not_opened: { bg: '#fafafa', color: '#bfbfbf', border: '#e8e8e8' },
   expired: { bg: '#fff2f0', color: '#cf1322', border: '#ffa39e' },
   expiring_soon: { bg: '#fff7e6', color: '#d46b08', border: '#ffd591' },
@@ -19,7 +18,6 @@ const chipStyles: Record<ServiceStatus, { bg: string; color: string; border: str
 
 const shortLabels: Record<ServiceStatus, string> = {
   active: '已开',
-  paused: '暂停',
   not_opened: '未开',
   expired: '过期',
   expiring_soon: '临期',

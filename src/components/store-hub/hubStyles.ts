@@ -49,8 +49,6 @@ export function manageStateTone(state: ManageState): HubStatusTone {
       return 'warning';
     case 'expired':
       return 'danger';
-    case 'paused':
-      return 'muted';
     default:
       return 'muted';
   }

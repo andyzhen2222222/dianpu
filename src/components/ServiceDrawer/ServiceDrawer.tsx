@@ -8,19 +8,12 @@ interface ServiceDrawerProps {
   open: boolean;
   context: DrawerContext | null;
   onClose: () => void;
-  onStoreAction: (
-    platformId: string,
-    storeId: string,
-    service: ServiceKey,
-    action: string,
-  ) => void;
 }
 
 export default function ServiceDrawer({
   open,
   context,
   onClose,
-  onStoreAction,
 }: ServiceDrawerProps) {
   const [selectedPlans, setSelectedPlans] = useState<
     Partial<Record<ServiceKey, string>>
@@ -46,26 +39,13 @@ export default function ServiceDrawer({
     onClose();
   };
 
-  const handleToggleStoreUsage = (
-    service: 'resale' | 'listing',
-    active: boolean,
-  ) => {
-    if (!context?.store) return;
-    onStoreAction(
-      context.platform.id,
-      context.store.id,
-      service,
-      active ? 'resume' : 'pause',
-    );
-  };
-
   return (
     <Drawer
       title={
         <div>
           <div className="drawer-title">服务开通 / 续费</div>
           <div className="drawer-subtitle">
-            支持按店铺或按平台管理功能开通、暂停与续费
+            支持按店铺或按平台管理功能开通与续费
           </div>
         </div>
       }
@@ -96,20 +76,6 @@ export default function ServiceDrawer({
           context={context}
           selectedPlans={selectedPlans}
           onSelectPlan={handleSelectPlan}
-          onToggleStoreUsage={handleToggleStoreUsage}
-          onPauseStoreService={(service) => {
-            if (!context.store) return;
-            onStoreAction(context.platform.id, context.store.id, service, 'pause');
-          }}
-          onResumeStoreService={(service) => {
-            if (!context.store) return;
-            onStoreAction(
-              context.platform.id,
-              context.store.id,
-              service,
-              'resume',
-            );
-          }}
         />
       )}
     </Drawer>

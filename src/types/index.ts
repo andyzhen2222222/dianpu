@@ -18,12 +18,11 @@ export type AuthStatus = 'normal' | 'abnormal';
 
 export type ServiceStatus =
   | 'active'
-  | 'paused'
   | 'not_opened'
   | 'expired'
   | 'expiring_soon';
 
-export type StoreUsageStatus = 'active' | 'paused';
+export type StoreUsageStatus = 'active';
 
 export type ServiceLevel = 'store' | 'platform';
 

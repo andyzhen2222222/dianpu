@@ -2014,6 +2014,23 @@ body,
   font-size: 20px;
   font-weight: 700;
   color: #262626;
+  line-height: 1.5;
+}
+
+.super-member-title-services {
+  margin: 0 4px;
+  color: #d46b08;
+  font-weight: 700;
+}
+
+.super-member-title-discount {
+  margin-left: 2px;
+  padding: 0 6px;
+  color: #fff;
+  font-weight: 700;
+  font-style: normal;
+  background: linear-gradient(90deg, #ff8c00, #ffa940);
+  border-radius: 4px;
 }
 
 .super-member-desc {

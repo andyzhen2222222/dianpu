@@ -11,7 +11,6 @@ import type {
 
 export const storeStatusLabels: Record<ServiceStatus, string> = {
   active: '已开通',
-  paused: '已暂停',
   not_opened: '未开通',
   expired: '已过期',
   expiring_soon: '快到期',
@@ -19,16 +18,13 @@ export const storeStatusLabels: Record<ServiceStatus, string> = {
 
 export function getInheritedDisplay(
   platformService: PlatformService,
-  inherited: InheritedService,
+  _inherited: InheritedService,
 ): { label: string; status: ServiceStatus } {
   if (platformService.status === 'not_opened') {
     return { label: '平台未开通', status: 'not_opened' };
   }
   if (platformService.status === 'expired') {
     return { label: '平台已过期', status: 'expired' };
-  }
-  if (inherited.storeUsageStatus === 'paused') {
-    return { label: '继承平台 · 已暂停', status: 'paused' };
   }
   return { label: '继承平台 · 开启', status: 'active' };
 }
@@ -107,18 +103,8 @@ export function filterPlatforms(
             return (svc as StoreService).status === filters.status;
           }
           const platformSvc = platform.platformServices[filters.service as 'resale' | 'listing'];
-          const inherited = svc as InheritedService;
           if (filters.status === 'active') {
-            return (
-              platformSvc.status === 'active' &&
-              inherited.storeUsageStatus === 'active'
-            );
-          }
-          if (filters.status === 'paused') {
-            return (
-              platformSvc.status === 'paused' ||
-              inherited.storeUsageStatus === 'paused'
-            );
+            return platformSvc.status === 'active';
           }
           return platformSvc.status === filters.status;
         });

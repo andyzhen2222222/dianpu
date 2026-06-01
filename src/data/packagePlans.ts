@@ -99,12 +99,12 @@ export const functionPackages: FunctionPackageConfig[] = [
     level: 'store',
     targetLabel: '续费店铺',
     columns: [
-      { id: '1m', title: '1月/店', price: 139, priceUnit: '/店' },
-      { id: '1q', title: '1季度/店', price: 1098, priceUnit: '/店', recommended: true },
-      { id: '1y', title: '1年/店', price: 3888, priceUnit: '/店' },
+      { id: '1m', title: '1月/店', price: 98, priceUnit: '/店' },
+      { id: '1q', title: '1季度/店', price: 268, priceUnit: '/店', recommended: true },
+      { id: '1y', title: '1年/店', price: 998, priceUnit: '/店' },
     ],
     features: [
-      { label: '价格', values: ['139/店', '1098/店', '3888/店'] },
+      { label: '价格', values: ['98/店', '268/店', '998/店'] },
       { label: '绑定店铺数', values: ['1个店铺', '1个店铺', '1个店铺'] },
       { label: '客服坐席', values: ['1个', '1个', '1个'] },
       { label: '消息记录', values: ['保留90天', '保留90天', '保留90天'] },

@@ -9,33 +9,33 @@ export interface SuperMemberPlan {
 
 /** 单独购买参考价：调价+客服(店) + 跟卖+刊登(平台) */
 const separatePrice = {
-  month: 498 + 139 + 498 + 498, // 1633
-  quarter: 1098 + 1098 + 1038 + 1098, // 4332
-  year: 3888 + 3888 + 3858 + 3888, // 15522
+  month: 498 + 98 + 498 + 498, // 1592
+  quarter: 1098 + 268 + 1038 + 1098, // 3502
+  year: 3888 + 998 + 3858 + 3888, // 12632
 } as const;
 
 export const superMemberPlans: SuperMemberPlan[] = [
   {
     id: '1m',
     label: '月卡',
-    price: 1199,
+    price: 1158,
     originalPrice: separatePrice.month,
-    packageName: '超级会员月卡',
+    packageName: '组合套餐月卡',
   },
   {
     id: '1q',
     label: '季卡',
-    price: 2899,
+    price: 2069,
     originalPrice: separatePrice.quarter,
-    packageName: '超级会员季卡',
+    packageName: '组合套餐季卡',
     recommended: true,
   },
   {
     id: '1y',
     label: '年卡',
-    price: 8999,
+    price: 6109,
     originalPrice: separatePrice.year,
-    packageName: '超级会员年卡',
+    packageName: '组合套餐年卡',
   },
 ];
 

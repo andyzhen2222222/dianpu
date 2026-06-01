@@ -23,7 +23,6 @@ const serviceOptions = [
 const statusOptions = [
   { label: '全部状态', value: '' },
   { label: '已开通', value: 'active' },
-  { label: '已暂停', value: 'paused' },
   { label: '未开通', value: 'not_opened' },
   { label: '已过期', value: 'expired' },
   { label: '快到期', value: 'expiring_soon' },

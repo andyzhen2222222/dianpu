@@ -100,7 +100,7 @@ export const initialPlatforms: Platform[] = [
           repricing: {
             name: 'AI调价',
             level: 'store',
-            status: 'paused',
+            status: 'active',
             packageName: '月卡',
             expireAt: '2026-07-01',
           },
@@ -109,7 +109,7 @@ export const initialPlatforms: Platform[] = [
             level: 'store',
             status: 'not_opened',
           },
-          resale: { inheritedFromPlatform: true, storeUsageStatus: 'paused' },
+          resale: { inheritedFromPlatform: true, storeUsageStatus: 'active' },
           listing: { inheritedFromPlatform: true, storeUsageStatus: 'active' },
         },
       },
@@ -243,7 +243,7 @@ export const initialPlatforms: Platform[] = [
           customerService: {
             name: '客服',
             level: 'store',
-            status: 'paused',
+            status: 'active',
             packageName: '月卡',
             expireAt: '2026-08-01',
           },
@@ -268,7 +268,7 @@ export const initialPlatforms: Platform[] = [
       listing: {
         name: 'AI刊登',
         level: 'platform',
-        status: 'paused',
+        status: 'active',
         packageName: '月卡',
         expireAt: '2026-07-20',
       },
@@ -301,7 +301,7 @@ export const initialPlatforms: Platform[] = [
             status: 'not_opened',
           },
           resale: { inheritedFromPlatform: true, storeUsageStatus: 'active' },
-          listing: { inheritedFromPlatform: true, storeUsageStatus: 'paused' },
+          listing: { inheritedFromPlatform: true, storeUsageStatus: 'active' },
         },
       },
       {
@@ -342,7 +342,7 @@ export const initialPlatforms: Platform[] = [
             expireAt: '2026-07-20',
           },
           resale: { inheritedFromPlatform: true, storeUsageStatus: 'active' },
-          listing: { inheritedFromPlatform: true, storeUsageStatus: 'paused' },
+          listing: { inheritedFromPlatform: true, storeUsageStatus: 'active' },
         },
       },
     ],
@@ -357,9 +357,9 @@ export const servicePlans = {
     { id: '1y', label: '1年/店', price: 3888 },
   ],
   customerService: [
-    { id: '1m', label: '1月/店', price: 139 },
-    { id: '1q', label: '1季度/店', price: 1098 },
-    { id: '1y', label: '1年/店', price: 3888 },
+    { id: '1m', label: '1月/店', price: 98 },
+    { id: '1q', label: '1季度/店', price: 268 },
+    { id: '1y', label: '1年/店', price: 998 },
   ],
   resale: [
     { id: '1m', label: '月卡', price: 998 },

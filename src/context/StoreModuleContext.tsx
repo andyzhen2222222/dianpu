@@ -29,13 +29,6 @@ function mockSyncDetail(key: SyncDataKey, store: Store): string | undefined {
   return prev;
 }
 
-const serviceActionNames: Record<ServiceKey, string> = {
-  repricing: 'AI调价',
-  customerService: '客服',
-  resale: 'AI跟卖',
-  listing: 'AI刊登',
-};
-
 function updateStoreInPlatforms(
   platforms: Platform[],
   platformId: string,
@@ -68,17 +61,6 @@ interface StoreModuleContextValue {
     storeId: string,
     keys?: SyncDataKey[],
   ) => Promise<void>;
-  handlePlatformAction: (
-    platformId: string,
-    service: 'resale' | 'listing',
-    action: string,
-  ) => void;
-  handleStoreAction: (
-    platformId: string,
-    storeId: string,
-    service: ServiceKey,
-    action: string,
-  ) => void;
   activatePlatformService: (
     platformId: string,
     service: 'resale' | 'listing',
@@ -292,76 +274,6 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
     [],
   );
 
-  const handlePlatformAction = useCallback(
-    (platformId: string, service: 'resale' | 'listing', action: string) => {
-      setPlatforms((prev) =>
-        prev.map((p) => {
-          if (p.id !== platformId) return p;
-          const svc = p.platformServices[service];
-          let newStatus = svc.status;
-          if (action === 'pause') newStatus = 'paused';
-          if (action === 'resume') newStatus = 'active';
-          message.success(
-            action === 'pause' ? `${svc.name} 已暂停` : `${svc.name} 已恢复`,
-          );
-          return {
-            ...p,
-            platformServices: {
-              ...p.platformServices,
-              [service]: { ...svc, status: newStatus },
-            },
-          };
-        }),
-      );
-    },
-    [],
-  );
-
-  const handleStoreAction = useCallback(
-    (
-      platformId: string,
-      storeId: string,
-      service: ServiceKey,
-      action: string,
-    ) => {
-      const serviceName = serviceActionNames[service];
-
-      setPlatforms((prev) =>
-        updateStoreInPlatforms(prev, platformId, storeId, (store) => {
-          const next = { ...store, services: { ...store.services } };
-
-          if (service === 'repricing' || service === 'customerService') {
-            const svc = { ...next.services[service] };
-            if (action === 'pause' && svc.status === 'active') {
-              svc.status = 'paused';
-            }
-            if (action === 'resume' && svc.status === 'paused') {
-              svc.status = 'active';
-            }
-            next.services[service] = svc;
-          }
-
-          if (service === 'resale' || service === 'listing') {
-            const inherited = { ...next.services[service] };
-            if (action === 'pause') inherited.storeUsageStatus = 'paused';
-            if (action === 'resume') inherited.storeUsageStatus = 'active';
-            next.services[service] = inherited;
-          }
-
-          return next;
-        }),
-      );
-
-      if (action === 'pause') {
-        message.success(`${serviceName} 已暂停`);
-      }
-      if (action === 'resume') {
-        message.success(`${serviceName} 已开启`);
-      }
-    },
-    [],
-  );
-
   const getExpireDate = (packageName: string) => {
     const expireAt = new Date();
     expireAt.setMonth(
@@ -475,7 +387,7 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
           };
         }),
       );
-      message.success('超级会员开通成功，全部功能已激活');
+      message.success('组合套餐开通成功，全部功能已激活');
     },
     [],
   );
@@ -526,8 +438,6 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
       updateStoreAuth,
       updateSyncEnabled,
       runStoreSync,
-      handlePlatformAction,
-      handleStoreAction,
       activatePlatformService,
       activateStoreService,
       activateSuperMember,
@@ -541,8 +451,6 @@ export function StoreModuleProvider({ children }: { children: ReactNode }) {
       updateStoreAuth,
       updateSyncEnabled,
       runStoreSync,
-      handlePlatformAction,
-      handleStoreAction,
       activatePlatformService,
       activateStoreService,
       activateSuperMember,

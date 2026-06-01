@@ -6,8 +6,6 @@ interface ActionButtonGroupProps {
   level: 'store' | 'platform' | 'inherited';
   onOpen?: () => void;
   onRenew?: () => void;
-  onPause?: () => void;
-  onResume?: () => void;
   onPlatformRenew?: () => void;
   onDetail?: () => void;
 }
@@ -17,8 +15,6 @@ export default function ActionButtonGroup({
   level,
   onOpen,
   onRenew,
-  onPause,
-  onResume,
   onPlatformRenew,
   onDetail,
 }: ActionButtonGroupProps) {
@@ -38,12 +34,6 @@ export default function ActionButtonGroup({
     ) : null;
 
   if (level === 'inherited') {
-    if (status === 'active') {
-      return <Space size={0}>{linkBtn('暂停使用', onPause)}</Space>;
-    }
-    if (status === 'paused') {
-      return <Space size={0}>{linkBtn('恢复使用', onResume)}</Space>;
-    }
     if (status === 'not_opened') {
       return <Space size={0}>{linkBtn('开通平台', onOpen, true)}</Space>;
     }
@@ -54,15 +44,7 @@ export default function ActionButtonGroup({
 
   if (level === 'store') {
     if (status === 'active') {
-      return (
-        <Space size={0}>
-          {linkBtn('暂停', onPause)}
-          {linkBtn('续费', onRenew, true)}
-        </Space>
-      );
-    }
-    if (status === 'paused') {
-      return <Space size={0}>{linkBtn('恢复', onResume, true)}</Space>;
+      return <Space size={0}>{linkBtn('续费', onRenew, true)}</Space>;
     }
     if (status === 'not_opened') {
       return <Space size={0}>{linkBtn('开通', onOpen, true)}</Space>;
@@ -74,20 +56,7 @@ export default function ActionButtonGroup({
 
   if (level === 'platform') {
     if (status === 'active') {
-      return (
-        <Space size={0}>
-          {linkBtn('暂停', onPause)}
-          {linkBtn('续费', onRenew, true)}
-        </Space>
-      );
-    }
-    if (status === 'paused') {
-      return (
-        <Space size={0}>
-          {linkBtn('恢复', onResume)}
-          {linkBtn('续费', onRenew, true)}
-        </Space>
-      );
+      return <Space size={0}>{linkBtn('续费', onRenew, true)}</Space>;
     }
     if (status === 'not_opened') {
       return <Space size={0}>{linkBtn('开通', onOpen, true)}</Space>;

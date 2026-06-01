@@ -40,7 +40,7 @@ const stateLegend = [
   { state: '正常', color: '#52c41a' },
   { state: '临期', color: '#fa8c16' },
   { state: '到期', color: '#ff4d4f' },
-  { state: '暂停', color: '#bfbfbf' },
+  { state: '未开通', color: '#d9d9d9' },
 ] as const;
 
 const panelLabels: Record<StorePanelKey, string> = {
@@ -69,9 +69,7 @@ function ServiceSummaryDots({ platform, store }: { platform: Platform; store: St
         ? '#52c41a'
         : state === 'expired'
           ? '#ff4d4f'
-          : state === 'paused'
-            ? '#bfbfbf'
-            : '#d9d9d9',
+          : '#d9d9d9',
   }));
 
   return (
@@ -96,7 +94,6 @@ export default function StoresPage() {
     updateStoreAuth,
     updateSyncEnabled,
     runStoreSync,
-    handleStoreAction,
     renewService,
   } = useStoreModule();
 
@@ -203,27 +200,7 @@ export default function StoresPage() {
           <StoreServicePanel
             platform={row.platform}
             store={row.store}
-            onEnable={(serviceKey) => {
-              const state =
-                serviceKey === 'repricing' || serviceKey === 'customerService'
-                  ? resolveManageState(
-                      row.store.services[serviceKey].status,
-                      getServiceExpireAt(row.platform, row.store, serviceKey),
-                    )
-                  : resolveInheritedManageState(
-                      row.platform.platformServices[serviceKey].status,
-                      row.store.services[serviceKey].storeUsageStatus,
-                      getServiceExpireAt(row.platform, row.store, serviceKey),
-                    );
-              if (state === 'not_opened') {
-                goActivate(serviceKey);
-              } else {
-                handleStoreAction(row.platform.id, row.store.id, serviceKey, 'resume');
-              }
-            }}
-            onPause={(serviceKey) =>
-              handleStoreAction(row.platform.id, row.store.id, serviceKey, 'pause')
-            }
+            onEnable={(serviceKey) => goActivate(serviceKey)}
             onRenew={(serviceKey) => openRenew(row.platform, row.store, serviceKey)}
           />
         ),

@@ -12,27 +12,20 @@ interface ManageServiceCellProps {
   manageState: ManageState;
   expireAt?: string;
   onEnable?: () => void;
-  onPause?: () => void;
   onRenew?: () => void;
 }
 
 function buildActions(
   manageState: ManageState,
   onEnable?: () => void,
-  onPause?: () => void,
   onRenew?: () => void,
 ): HubAction[] {
   switch (manageState) {
     case 'normal':
     case 'expiring':
-      return [
-        ...(onRenew ? [{ key: 'renew', label: '续费', primary: true, onClick: onRenew }] : []),
-        ...(onPause ? [{ key: 'pause', label: '暂停', onClick: onPause }] : []),
-      ];
+      return onRenew ? [{ key: 'renew', label: '续费', primary: true, onClick: onRenew }] : [];
     case 'expired':
       return onRenew ? [{ key: 'renew', label: '续费', primary: true, onClick: onRenew }] : [];
-    case 'paused':
-      return onEnable ? [{ key: 'enable', label: '开启', primary: true, onClick: onEnable }] : [];
     case 'not_opened':
       return onEnable ? [{ key: 'activate', label: '开通', primary: true, onClick: onEnable }] : [];
     default:
@@ -44,7 +37,6 @@ export default function ManageServiceCell({
   manageState,
   expireAt,
   onEnable,
-  onPause,
   onRenew,
 }: ManageServiceCellProps) {
   const shortExpire = formatShortDate(expireAt);
@@ -58,7 +50,7 @@ export default function ManageServiceCell({
         meta={statusMeta}
       />
       <HubActions
-        actions={buildActions(manageState, onEnable, onPause, onRenew)}
+        actions={buildActions(manageState, onEnable, onRenew)}
       />
     </div>
   );

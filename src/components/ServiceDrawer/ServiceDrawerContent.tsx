@@ -1,7 +1,7 @@
-import { Button, Switch } from 'antd';
+import { Button } from 'antd';
 import { useEffect, useRef } from 'react';
 import { servicePlans } from '../../data/mockData';
-import type { DrawerContext, ServiceKey } from '../../types';
+import type { DrawerContext, ServiceKey, ServiceStatus } from '../../types';
 import { storeStatusLabels } from '../../utils/serviceHelpers';
 import AuthInfoCard from '../AuthInfoCard';
 import PlanSelector from '../PlanSelector';
@@ -12,18 +12,13 @@ interface ServiceCardProps {
   title: string;
   level: 'store' | 'platform';
   status: string;
-  statusType: 'active' | 'paused' | 'not_opened' | 'expired' | 'expiring_soon';
+  statusType: ServiceStatus;
   packageName?: string;
   expireAt?: string;
   quota?: string;
-  storeUsageActive?: boolean;
   selectedPlan?: string;
   highlighted?: boolean;
   onSelectPlan: (planId: string) => void;
-  onToggleStoreUsage?: (active: boolean) => void;
-  onPause?: () => void;
-  onResume?: () => void;
-  onRenew?: () => void;
 }
 
 function ServiceCard({
@@ -35,13 +30,9 @@ function ServiceCard({
   packageName,
   expireAt,
   quota,
-  storeUsageActive,
   selectedPlan,
   highlighted,
   onSelectPlan,
-  onToggleStoreUsage,
-  onPause,
-  onResume,
 }: ServiceCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const plans = servicePlans[serviceKey as keyof typeof servicePlans] ?? [];
@@ -92,18 +83,7 @@ function ServiceCard({
 
       {level === 'platform' && statusType === 'active' && (
         <div className="service-card-inherit-note">
-          平台开通后，所属店铺默认继承，可按店铺暂停使用。
-        </div>
-      )}
-
-      {level === 'platform' && statusType === 'active' && storeUsageActive !== undefined && (
-        <div className="service-card-toggle-row">
-          <span>当前店铺使用状态：{storeUsageActive ? '已开启' : '已暂停'}</span>
-          <Switch
-            checked={storeUsageActive}
-            onChange={onToggleStoreUsage}
-            size="small"
-          />
+          平台开通后，所属店铺默认继承平台级服务。
         </div>
       )}
 
@@ -120,18 +100,8 @@ function ServiceCard({
 
       <div className="service-card-actions">
         {level === 'store' && statusType === 'active' && (
-          <>
-            <Button size="small" onClick={onPause}>
-              暂停功能
-            </Button>
-            <Button type="primary" size="small">
-              立即续费
-            </Button>
-          </>
-        )}
-        {level === 'store' && statusType === 'paused' && (
-          <Button type="primary" size="small" onClick={onResume}>
-            恢复功能
+          <Button type="primary" size="small">
+            立即续费
           </Button>
         )}
         {level === 'store' &&
@@ -141,14 +111,9 @@ function ServiceCard({
             </Button>
           )}
         {level === 'platform' && statusType === 'active' && (
-          <>
-            <Button size="small" onClick={onPause}>
-              暂停本店使用
-            </Button>
-            <Button type="primary" size="small">
-              平台续费
-            </Button>
-          </>
+          <Button type="primary" size="small">
+            平台续费
+          </Button>
         )}
         {level === 'platform' && statusType === 'not_opened' && (
           <Button type="primary" size="small">
@@ -169,18 +134,12 @@ interface ServiceDrawerContentProps {
   context: DrawerContext;
   selectedPlans: Partial<Record<ServiceKey, string>>;
   onSelectPlan: (service: ServiceKey, planId: string) => void;
-  onToggleStoreUsage: (service: 'resale' | 'listing', active: boolean) => void;
-  onPauseStoreService: (service: ServiceKey) => void;
-  onResumeStoreService: (service: ServiceKey) => void;
 }
 
 export default function ServiceDrawerContent({
   context,
   selectedPlans,
   onSelectPlan,
-  onToggleStoreUsage,
-  onPauseStoreService,
-  onResumeStoreService,
 }: ServiceDrawerContentProps) {
   const { platform, store, focusService } = context;
   const targetStore = store ?? platform.stores[0];
@@ -217,8 +176,6 @@ export default function ServiceDrawerContent({
           selectedPlan={selectedPlans.repricing}
           highlighted={focusService === 'repricing'}
           onSelectPlan={(id) => onSelectPlan('repricing', id)}
-          onPause={() => onPauseStoreService('repricing')}
-          onResume={() => onResumeStoreService('repricing')}
         />
       )}
 
@@ -234,8 +191,6 @@ export default function ServiceDrawerContent({
           selectedPlan={selectedPlans.customerService}
           highlighted={focusService === 'customerService'}
           onSelectPlan={(id) => onSelectPlan('customerService', id)}
-          onPause={() => onPauseStoreService('customerService')}
-          onResume={() => onResumeStoreService('customerService')}
         />
       )}
 
@@ -248,17 +203,9 @@ export default function ServiceDrawerContent({
         packageName={platformResale.packageName}
         expireAt={platformResale.expireAt}
         quota={platformResale.quota}
-        storeUsageActive={
-          targetStore
-            ? targetStore.services.resale.storeUsageStatus === 'active'
-            : undefined
-        }
         selectedPlan={selectedPlans.resale}
         highlighted={focusService === 'resale'}
         onSelectPlan={(id) => onSelectPlan('resale', id)}
-        onToggleStoreUsage={(active) => onToggleStoreUsage('resale', active)}
-        onPause={() => onPauseStoreService('resale')}
-        onResume={() => onResumeStoreService('resale')}
       />
 
       <ServiceCard
@@ -269,17 +216,9 @@ export default function ServiceDrawerContent({
         statusType={platformListing.status}
         packageName={platformListing.packageName}
         expireAt={platformListing.expireAt}
-        storeUsageActive={
-          targetStore
-            ? targetStore.services.listing.storeUsageStatus === 'active'
-            : undefined
-        }
         selectedPlan={selectedPlans.listing}
         highlighted={focusService === 'listing'}
         onSelectPlan={(id) => onSelectPlan('listing', id)}
-        onToggleStoreUsage={(active) => onToggleStoreUsage('listing', active)}
-        onPause={() => onPauseStoreService('listing')}
-        onResume={() => onResumeStoreService('listing')}
       />
 
       {targetStore && (

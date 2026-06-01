@@ -11,11 +11,6 @@ interface PlatformServiceGroupProps {
   expanded: boolean;
   onToggle: (platformId: string) => void;
   onOpenDrawer: (ctx: DrawerContext) => void;
-  onPlatformAction: (
-    platformId: string,
-    service: 'resale' | 'listing',
-    action: string,
-  ) => void;
   onStoreAction: (
     platformId: string,
     storeId: string,
@@ -29,15 +24,11 @@ function PlatformServiceItem({
   service,
   onOpen,
   onRenew,
-  onPause,
-  onResume,
 }: {
   name: string;
   service: Platform['platformServices']['resale'];
   onOpen: () => void;
   onRenew: () => void;
-  onPause: () => void;
-  onResume: () => void;
 }) {
   return (
     <div className="platform-service-item">
@@ -54,8 +45,6 @@ function PlatformServiceItem({
         level="platform"
         onOpen={onOpen}
         onRenew={onRenew}
-        onPause={onPause}
-        onResume={onResume}
       />
     </div>
   );
@@ -66,7 +55,6 @@ export default function PlatformServiceGroup({
   expanded,
   onToggle,
   onOpenDrawer,
-  onPlatformAction,
   onStoreAction,
 }: PlatformServiceGroupProps) {
   return (
@@ -120,8 +108,6 @@ export default function PlatformServiceGroup({
                 mode: 'renew',
               })
             }
-            onPause={() => onPlatformAction(platform.id, 'resale', 'pause')}
-            onResume={() => onPlatformAction(platform.id, 'resale', 'resume')}
           />
           <PlatformServiceItem
             name="AI刊登"
@@ -140,8 +126,6 @@ export default function PlatformServiceGroup({
                 mode: 'renew',
               })
             }
-            onPause={() => onPlatformAction(platform.id, 'listing', 'pause')}
-            onResume={() => onPlatformAction(platform.id, 'listing', 'resume')}
           />
         </div>
       </div>
@@ -149,7 +133,7 @@ export default function PlatformServiceGroup({
       {expanded && platform.stores.length > 0 && (
         <>
           <div className="platform-group-hint">
-            平台开通后，所属店铺默认继承，可对单店暂停使用。
+            平台开通后，所属店铺默认继承平台级服务。
           </div>
           <StoreServiceTable
             platform={platform}
